@@ -1,9 +1,6 @@
 #!/bin/bash
 
-#
 # Configuration
-#
-
 #SOURCE="/dev/nandf"
 #DEST="/root/udisk"
 #PREFIX="nandf-backup"
@@ -11,5 +8,4 @@
 #DATE="$(date +%Y%m%d-%H%M%S)"
 #OUTPUT="$DEST/${PREFIX}-${DATE}.img.gz"
 
-dd if=/dev/nandf bs=4M | gzip -1 > /root/udisk/nandf-$(date +%Y%m%d-%H%M%S).img.gz
-
+dd if="$SOURCE" bs=4M | gzip -"${COMPRESS_LEVEL}" > "$OUTPUT"
