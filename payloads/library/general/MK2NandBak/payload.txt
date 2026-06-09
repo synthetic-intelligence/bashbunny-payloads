@@ -16,16 +16,31 @@ OUTPUT_SUFFIX="1"
 # Backup
 
 LED GREEN
-if [ -b ${SDHC} ]; then
-  mount -o sync ${SDHC} ${SDHC_MOUNT}
-else
-  LED FAIL
-  exit 1
+
+mount -o sync "${SDHC}" "${SDHC_MOUNT}" || {
+    LED FAIL
+    exit 1
+}
+
+LED ATTACK
+
+if [ ! -d "$DEST" ]; then
+    mkdir -p "$DEST"
 fi
 
-while [[ -e "${OUTPUT_PREFIX}${OUTPUT_SUFFIX}.tar.gz" ]]; do
-    ((${OUTPUT_SUFFIX}++))
+while [ -e "${OUTPUT_PREFIX}${OUTPUT_SUFFIX}.gz" ]; do
+    OUTPUT_SUFFIX=$((OUTPUT_SUFFIX + 1))
 done
 
-dd if="$SOURCE" bs=4M | gzip -"${COMPRESS_LEVEL}" > "${OUTPUT_PREFIX} ${OUTPUT_SUFFIX}" && \
-LED FINISH
+LED SPECIAL
+
+if dd if="$SOURCE" bs=4M | gzip -c -"${COMPRESS_LEVEL}" > "${OUTPUT_PREFIX}${OUTPUT_SUFFIX}.gz"; then
+    sync
+    umount "$SDHC_MOUNT"
+    LED FINISH
+else
+    sync
+    umount "$SDHC_MOUNT" 2>/dev/null
+    LED FAIL
+    exit 1
+fi
