@@ -33,3 +33,13 @@ SDHC formatted in a format that internal OS of the Bunny can read
 Stable 5V DC power
 
 patience
+
+## Accessing Backup
+
+gunzip backups/nandf-backup-*.gz
+
+sudo mkdir /mnt/image
+
+sudo mount -o loop nandf-backup-* /mnt/image
+
+cd /mnt/image
