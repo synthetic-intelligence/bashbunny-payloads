@@ -2,7 +2,6 @@
 
 # Initialize
 LED SETUP 
-
 # Configuration
 SOURCE="/dev/nandf"
 SDHC="/dev/mmcblk0p1"
@@ -15,7 +14,7 @@ OUTPUT_SUFFIX="1"
 
 # Backup
 
-LED GREEN
+LED G
 
 mount -o sync "${SDHC}" "${SDHC_MOUNT}" || {
     LED FAIL
